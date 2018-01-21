@@ -28,7 +28,6 @@ public class DataBaseQuery
 			
 			while (result.next()) {
 				Project p = new Project(result.getInt(1), result.getString(2), result.getString(3), result.getBoolean(4));
-	            System.out.println(p.toString());
 	            a.add(p);
 	        }
 		} 
@@ -36,7 +35,10 @@ public class DataBaseQuery
 		{
 			log.error("Error in getProjectsList() " + e);
 		}
-		return a;
+		if(a.size()>0)
+			return a;
+		else
+			return null;
 	}
 
 	
@@ -119,8 +121,11 @@ public class DataBaseQuery
 			operation.setInt(1,id);
 
 			ResultSet result=operation.executeQuery();
-			result.next();
-			p = new Project(result.getInt(1), result.getString(2), result.getString(3), result.getBoolean(4)); 
+			System.out.println(result.toString());
+			if(result.next())
+				p = new Project(result.getInt(1), result.getString(2), result.getString(3), result.getBoolean(4)); 
+			else
+				return null;
 		} 
 		catch (Exception e) 
 		{
@@ -152,21 +157,6 @@ public class DataBaseQuery
 		}
 		return p.toString() + " votes for: " + votesFor + " votes against: " + votesAgainst;
 	}
-	/*
-	public static void main(String [] args){
-		DataBaseQuery dq = new DataBaseQuery(); 
-		dq.insertProject();
-		//dq.closeProject(1);
-
-		ArrayList<Project> a = dq.getProjectsList();
-		//dq.insertUser();
-		dq.getUsers();
-		dq.makeVote(1, 8, "against");
-		System.out.println(dq.selectAll("projects_voted_by_users"));
-		System.out.println(dq.projectDetails(1));
-
-		
-	}*/
 	
 	
 }
